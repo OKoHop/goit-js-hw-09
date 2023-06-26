@@ -1,5 +1,6 @@
 // Описан в документации
 import flatpickr from "flatpickr";
+import Notiflix, { Notify } from 'notiflix';
 // Дополнительный импорт стилей
 import "flatpickr/dist/flatpickr.min.css";
 
@@ -22,13 +23,12 @@ const options = {
   onClose(selectedDates) {
       if (selectedDates[0].getTime() - options.defaultDate.getTime() < 0) {
           refs.startBtn.setAttribute('disabled', '')
-          return window.alert('Please choose a date in the future');
+          return Notify.failure('Please choose a date in the future');
       }
       refs.startBtn.removeAttribute('disabled');
       setInterval(() => {
           const time = selectedDates[0].getTime() - Date.now();
           const { days, hours, minutes, seconds } = convertMs(time);
-
           runTimer({ days, hours, minutes, seconds });
     }, 1000)
     },
@@ -40,6 +40,7 @@ function runTimer( { days, hours, minutes, seconds } ) {
     refs.hours.textContent = `${hours}`;
     refs.min.textContent = `${minutes}`;
     refs.seconds.textContent = `${seconds}`;
+    // refs.startBtn.setAttribute('disabled', '')
 }
 
 function convertMs(ms) {
